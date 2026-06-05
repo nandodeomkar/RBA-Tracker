@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en-AU" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RBA Board Vote Tracker — how the Monetary Policy Board votes on the cash rate</title>
+  <meta name="description" content="An independent, plain-language record of how the Reserve Bank of Australia's Monetary Policy Board has voted on each cash-rate decision since it began publishing its vote splits in July 2025.">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#f4f3ee">
+
+  <!-- Icons -->
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+  <!-- Social / Open Graph. NOTE: these absolute URLs assume the Vercel project is
+       named "rba-vote-tracker" (→ rba-vote-tracker.vercel.app). If your URL differs,
+       find-and-replace the domain below. See DEPLOY.md. -->
+  <link rel="canonical" href="https://rba-vote-tracker.vercel.app/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="RBA Board Vote Tracker">
+  <meta property="og:title" content="RBA Board Vote Tracker">
+  <meta property="og:description" content="How the Reserve Bank of Australia's Monetary Policy Board has voted on every cash-rate decision since July 2025. Independent; every figure sourced from the RBA.">
+  <meta property="og:url" content="https://rba-vote-tracker.vercel.app/">
+  <meta property="og:image" content="https://rba-vote-tracker.vercel.app/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="RBA Board Vote Tracker — how the RBA's board votes on the cash rate.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="RBA Board Vote Tracker">
+  <meta name="twitter:description" content="How the RBA's Monetary Policy Board has voted on every cash-rate decision since July 2025.">
+  <meta name="twitter:image" content="https://rba-vote-tracker.vercel.app/og-image.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap">
+    <span class="wordmark" data-fade="1"><span class="mark"></span>RBA Board Vote Tracker <span class="sub">· cash-rate decisions</span></span>
+    <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle light or dark theme" data-fade="1"><span class="ring"></span><span id="theme-label">Dark</span></button>
+  </div>
+</header>
+
+<main>
+  <section class="hero wrap" aria-labelledby="hero-h">
+    <p class="eyebrow" id="hero-eyebrow" data-fade="1">Latest decision</p>
+    <h1 class="hero-statement" id="hero-h" data-fade="2"></h1>
+
+    <div class="hero-figure">
+      <div class="rate-art" data-fade="3">
+        <p class="eyebrow">Cash-rate target</p>
+        <div class="rate-display"><span class="num" id="rate-num">0.00</span></div>
+        <p class="rate-foot"><span class="chip" id="rate-chip"></span><span id="rate-meet"></span></p>
+      </div>
+
+      <div class="vote" data-fade="4">
+        <p class="eyebrow">How the board voted</p>
+        <div class="vote-score"><span class="n"><span id="v-for">0</span>–<span id="v-against">0</span></span><span class="tag" id="v-tag">Majority</span></div>
+        <div class="dots" id="dots" role="img"></div>
+        <div class="dots-key"><span><i class="f"></i> <span id="key-for">for</span></span><span><i class="a"></i> <span id="key-against">against</span></span></div>
+      </div>
+    </div>
+
+    <div id="hero-dissent" data-fade="5"></div>
+    <a class="read" id="hero-read" href="#" rel="noopener" data-fade="5">Read the RBA statement <span class="ar">→</span></a>
+  </section>
+
+  <div class="wrap"><hr class="hr"></div>
+
+  <section class="section wrap" aria-labelledby="chart-h">
+    <div class="section-head">
+      <p class="eyebrow">The record</p>
+      <h2 id="chart-h">The cash-rate path, and how each call was made</h2>
+      <p>The line traces the target since 2022. Markers from July&nbsp;2025 mark every meeting with a published vote — a cut, hold or hike. Earlier moves carry no vote.</p>
+    </div>
+
+    <form class="filters" id="filters" aria-label="Filter the voting record">
+      <div class="filter-field">
+        <label class="eyebrow" for="filter-year">Year</label>
+        <select id="filter-year" name="year"><option value="all">All years</option></select>
+      </div>
+      <fieldset class="filter-field">
+        <legend class="eyebrow" style="margin-right:2px">Type</legend>
+        <div class="types-row">
+          <label class="check"><input type="checkbox" name="type" value="cut" checked> <span class="glyph">▼</span> Cut</label>
+          <label class="check"><input type="checkbox" name="type" value="hold" checked> <span class="glyph">●</span> Hold</label>
+          <label class="check"><input type="checkbox" name="type" value="hike" checked> <span class="glyph">▲</span> Hike</label>
+        </div>
+      </fieldset>
+      <button type="button" id="filter-reset" class="btn-reset">Reset</button>
+      <p id="filter-status" class="filter-status" role="status" aria-live="polite"></p>
+    </form>
+
+    <figure style="margin:0">
+      <div id="chart" class="chart" role="img" aria-label="Line chart of the RBA cash-rate target over time with markers for each published vote."></div>
+      <figcaption>Cash-rate target (%) since January&nbsp;2022. The full, screen-reader-friendly record is in the table below.</figcaption>
+    </figure>
+  </section>
+
+  <section class="section record wrap" aria-labelledby="tbl-h">
+    <div class="section-head"><p class="eyebrow">Every meeting</p><h2 id="tbl-h" style="font-size:1.5rem">The full record</h2></div>
+    <div style="overflow-x:auto" tabindex="0" role="region" aria-label="Voting record table (scrollable)">
+      <table>
+        <thead><tr>
+          <th scope="col">Meeting</th><th scope="col">Decision</th><th scope="col">Change</th>
+          <th scope="col">Cash rate</th><th scope="col">Vote</th><th scope="col">Source</th>
+        </tr></thead>
+        <tbody id="record-tbody"></tbody>
+      </table>
+    </div>
+  </section>
+</main>
+
+<footer class="foot" id="about">
+  <div class="wrap">
+    <div class="foot-grid">
+      <section>
+        <h3>The votes are unattributed</h3>
+        <p>From July&nbsp;2025 the RBA publishes only the count of votes for and against the decision taken — for example &ldquo;6 in favour, 3 against.&rdquo; Who voted which way is not disclosed, so this record never names members.</p>
+      </section>
+      <section>
+        <h3>The board</h3>
+        <p>The Monetary Policy Board has nine members — the Governor, the Deputy Governor, the Secretary to the Treasury, and six external members. It meets about eight times a year and decides by majority of those present.</p>
+      </section>
+      <section>
+        <h3>Sources</h3>
+        <ul class="sources-list">
+          <li><a href="https://www.rba.gov.au/monetary-policy/int-rate-decisions/" rel="noopener">RBA — Monetary policy decisions</a></li>
+          <li><a href="https://www.rba.gov.au/statistics/cash-rate/" rel="noopener">RBA — Cash rate target history</a></li>
+          <li><a href="https://www.rba.gov.au/monetary-policy/rba-board-minutes/" rel="noopener">RBA — Board minutes</a></li>
+        </ul>
+        <p class="fine" style="margin-top:16px">Entered by hand from the sources above. An independent project — not an official RBA product.</p>
+      </section>
+    </div>
+  </div>
+</footer>
+
+<noscript>
+  <div class="wrap" style="padding:24px 0;color:var(--ink-2)">
+    This dashboard needs JavaScript for the chart and record. You can read the decisions on the
+    <a href="https://www.rba.gov.au/monetary-policy/int-rate-decisions/" style="color:var(--accent)">RBA's monetary policy decisions page</a>.
+  </div>
+</noscript>
+
+<!-- Data (single source of truth), chart library, shared engine, then page wiring. -->
+<script src="data.js"></script>
+<script src="vendor/echarts.min.js"></script>
+<script src="core.js"></script>
+<script src="app.js"></script>
+
+<!-- Vercel Web Analytics (privacy-friendly, cookieless). Activates only on Vercel;
+     the /_vercel path 404s harmlessly during local preview. -->
+<script>window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments)};</script>
+<script defer src="/_vercel/insights/script.js"></script>
+</body>
+</html>
