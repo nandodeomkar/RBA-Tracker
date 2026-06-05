@@ -18,19 +18,19 @@ git init
 git add .
 git commit -m "RBA Board Vote Tracker — initial site"
 git branch -M main
-# Create an empty repo named  rba-vote-tracker  on github.com first, then:
-git remote add origin https://github.com/<you>/rba-vote-tracker.git
+# Create an empty repo named  rba-tracker  on github.com first, then:
+git remote add origin https://github.com/<you>/rba-tracker.git
 git push -u origin main
 ```
 
 **Option B — no command line:** install **GitHub Desktop** (<https://desktop.github.com>)
 → *File ▸ Add local repository* → pick this folder → **Publish repository** (name it
-`rba-vote-tracker`, keep it public).
+`rba-tracker`, keep it public).
 
 ## 2. Deploy on Vercel
-1. Go to <https://vercel.com/new> and **Import** your `rba-vote-tracker` repo.
-2. **Project Name:** `rba-vote-tracker` — this makes your URL
-   `https://rba-vote-tracker.vercel.app`, which already matches the social tags in
+1. Go to <https://vercel.com/new> and **Import** your `rba-tracker` repo.
+2. **Project Name:** `rba-tracker` — this makes your URL
+   `https://rba-tracker.vercel.app`, which already matches the social tags in
    `index.html`. (Different name? See step 4.)
 3. **Framework Preset:** *Other*. Leave **Build Command**, **Output Directory**, and
    **Install Command** empty — Vercel just serves the repo root.
@@ -42,10 +42,10 @@ The tracking snippet is already in `index.html`; you just enable the product:
 - Numbers show up after the next visit. No cookie banner needed — it's anonymous and
   privacy-friendly.
 
-## 4. Only if you named the project something other than `rba-vote-tracker`
+## 4. Only if you named the project something other than `rba-tracker`
 The Open Graph / Twitter / canonical URLs in `index.html` point at
-`https://rba-vote-tracker.vercel.app`. If your URL differs, find-and-replace
-`rba-vote-tracker.vercel.app` with your real subdomain in `index.html`, then commit and
+`https://rba-tracker.vercel.app`. If your URL differs, find-and-replace
+`rba-tracker.vercel.app` with your real subdomain in `index.html`, then commit and
 push — Vercel redeploys automatically.
 
 ## 5. Verify the launch
