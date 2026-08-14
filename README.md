@@ -5,12 +5,14 @@ An independent, public-facing dashboard showing how the Reserve Bank of Australi
 publishing an **unattributed** vote record in **July 2025** — alongside the decision
 and where the cash rate landed.
 
+🌐 **Live site:** [rba-tracker.vercel.app](https://rba-tracker.vercel.app)
+
 It is a single static page: plain HTML, CSS, and vanilla JavaScript, with
 [Apache ECharts](https://echarts.apache.org/) vendored locally for the chart.
 There is **no build step, no backend, and no data is fetched at runtime** — all of
 the data lives in [`data.js`](data.js).
 
-> This is **not** an official RBA product and is not affiliated with the Reserve
+> **Disclaimer:** This is **not** an official RBA product and is not affiliated with the Reserve
 > Bank of Australia. Every figure links to its RBA source.
 
 ---
@@ -113,3 +115,21 @@ later. To add a decision:
 - RBA — [Monetary policy decisions](https://www.rba.gov.au/monetary-policy/int-rate-decisions/)
 - RBA — [Cash rate target history](https://www.rba.gov.au/statistics/cash-rate/)
 - RBA — [Monetary Policy Board minutes](https://www.rba.gov.au/monetary-policy/rba-board-minutes/)
+
+---
+
+## Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Front end | Vanilla HTML, CSS, JavaScript |
+| Charts | Apache ECharts (vendored) |
+| Typography | Schibsted Grotesk (Google Fonts) |
+| Hosting | Vercel (free tier) |
+
+---
+
+## License
+
+This project is for personal/educational use.
+
