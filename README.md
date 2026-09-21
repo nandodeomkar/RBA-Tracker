@@ -92,6 +92,10 @@ later. To add a decision:
   than altering the counts.
 - **Pre-vote-record history.** Rate moves before July 2025 belong only in
   `rateHistory` (no vote fields) and never get a placeholder split.
+- **Membership is not attribution.** `board.members` records who sat on the Board
+  and when. It is a separate public fact and must stay separate: never join it to
+  `decisions`, never render a name beside a vote split, and never present a change
+  of membership as explaining a vote.
 
 ---
 
@@ -110,11 +114,45 @@ later. To add a decision:
 | `minutes_url` | string *(optional)* | RBA minutes (~2 weeks later). |
 | `notes` | string *(optional)* | Casting vote, vacancy, absence, etc. |
 
+## Board membership (`board.members[]`)
+
+The **"The board, and how it has changed"** section is built from `board.members`
+— a record of who has sat on the Monetary Policy Board since it was created on
+**1 March 2025**, replacing the former Reserve Bank Board. It seats nine: three ex
+officio (Governor, Deputy Governor, Secretary to the Treasury) and six external
+members appointed by the Treasurer.
+
+> **This is membership, not attribution.** The section is rendered well away from
+> the voting record and is never joined to it. See the rule above.
+
+| Field | Type | Notes |
+|---|---|---|
+| `name` | string | As the RBA styles it, including post-nominals. |
+| `role` | string | Ex officio title, or `"External member"`. |
+| `seat` | `"ex-officio"` \| `"external"` | Three ex officio, six external. |
+| `start` | string `YYYY-MM-DD` | First day on the Board. |
+| `end` | string \| `null` | Last day — actual for past members, scheduled for current ones. `null` where the seat has no fixed expiry (the Treasury Secretary holds it for as long as they hold the office). |
+| `note` | string *(optional)* | Anything the dates alone don't explain. |
+| `source_url` | string *(optional)* | RBA release announcing the appointment. |
+
+### When the board changes
+
+1. Add the incoming member with their `start`, scheduled `end`, and `source_url`.
+2. Set the outgoing member's `end` to their **last day**, not the successor's first.
+   The page pairs a join with the departure that ended the day before, to render
+   "X joined, replacing Y" — get this wrong and the two show as unrelated events.
+3. Leave `board.seats` at `9` unless the legislation changes.
+
+Membership doubles as a check on the vote data: the number of members seated on a
+meeting date should equal `votes_for + votes_against` for that meeting. If it
+doesn't, either the vote counts or the membership dates are wrong.
+
 ## Sources
 
 - RBA — [Monetary policy decisions](https://www.rba.gov.au/monetary-policy/int-rate-decisions/)
 - RBA — [Cash rate target history](https://www.rba.gov.au/statistics/cash-rate/)
 - RBA — [Monetary Policy Board minutes](https://www.rba.gov.au/monetary-policy/rba-board-minutes/)
+- RBA — [Past and present Monetary Policy Board members](https://www.rba.gov.au/about-rba/history/monetary-policy-board-members.html)
 
 ---
 

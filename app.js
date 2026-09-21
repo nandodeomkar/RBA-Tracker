@@ -62,6 +62,13 @@
     }
   });
 
+  // board composition — membership only, never joined to the vote record
+  C.renderBoard({
+    listEl: "board-current",
+    timelineEl: "board-timeline",
+    statusEl: "board-status"
+  });
+
   // animate
   C.revealOnLoad();
   C.countUp(document.getElementById("rate-num"), d.cash_rate_pct, { decimals:2, suffix:"%", duration:1500, delay:400 });

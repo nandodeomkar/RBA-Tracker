@@ -306,6 +306,91 @@
     return rows.length;
   }
 
+  // ---------- board composition ----------
+  // Membership only. This never reads `decisions` and never will: the vote
+  // record is unattributed, so nothing rendered here may sit beside a vote
+  // split or imply how any member voted.
+  function iso(d) {
+    var m = d.getMonth() + 1, day = d.getDate();
+    return d.getFullYear() + "-" + (m < 10 ? "0" : "") + m + "-" + (day < 10 ? "0" : "") + day;
+  }
+  // Calendar-day arithmetic (not ts - DAY, which drifts across DST).
+  function dayBefore(s) { var d = parseDate(s); d.setDate(d.getDate() - 1); return iso(d); }
+
+  // Members seated on a given date. A null `end` means the seat has no
+  // fixed expiry (held for as long as the member holds the office).
+  function boardAt(dateStr) {
+    if (!DATA.board) return [];
+    var t = ts(dateStr);
+    return DATA.board.members.filter(function (m) {
+      return ts(m.start) <= t && (!m.end || ts(m.end) >= t);
+    });
+  }
+
+  // Handovers since the Board was established, newest first. A join is
+  // paired with the departure it filled when that term ended the day before.
+  function boardTimeline() {
+    if (!DATA.board) return [];
+    var est = ts(DATA.board.established), members = DATA.board.members;
+    return members.filter(function (m) { return ts(m.start) > est; })
+      .sort(function (a, b) { return ts(b.start) - ts(a.start); })
+      .map(function (m) {
+        var prev = dayBefore(m.start), left = null;
+        members.forEach(function (o) { if (o.end === prev) left = o; });
+        return { date: m.start, joined: m, left: left };
+      });
+  }
+
+  function renderBoard(opts) {
+    opts = opts || {};
+    if (!DATA.board) return null;
+    var asOf = opts.asOf || DATA.meta.lastUpdated;
+    var seated = boardAt(asOf);
+    var events = boardTimeline();
+    function el(x) { return typeof x === "string" ? document.getElementById(x) : x; }
+
+    var listEl = el(opts.listEl);
+    if (listEl) {
+      var order = { "ex-officio": 0, external: 1 };
+      listEl.innerHTML = seated.slice().sort(function (a, b) {
+        return (order[a.seat] - order[b.seat]) || (ts(a.start) - ts(b.start));
+      }).map(function (m) {
+        return '<li class="bm" data-seat="' + m.seat + '">'
+          + '<span class="bm-name">' + escapeHtml(m.name) + "</span>"
+          + '<span class="bm-role">' + escapeHtml(m.role) + "</span>"
+          + '<span class="bm-term num">' + (m.end ? "To " + formatDateShort(m.end) : "While in office") + "</span>"
+          + "</li>";
+      }).join("");
+    }
+
+    var timelineEl = el(opts.timelineEl);
+    if (timelineEl) {
+      timelineEl.innerHTML = events.length ? events.map(function (e) {
+        var s = '<li class="tl">'
+          + '<span class="tl-date num">' + formatDateShort(e.date) + "</span>"
+          + '<span class="tl-text"><strong>' + escapeHtml(e.joined.name) + "</strong> joined";
+        if (e.left) s += ", replacing " + escapeHtml(e.left.name)
+          + " (term ended " + formatDateShort(e.left.end) + ")";
+        s += ".";
+        if (e.joined.source_url) {
+          s += ' <a href="' + e.joined.source_url + '" rel="noopener">RBA&nbsp;notice ↗</a>';
+        }
+        return s + "</span></li>";
+      }).join("") : '<li class="tl"><span class="tl-text">No changes yet.</span></li>';
+    }
+
+    var statusEl = el(opts.statusEl);
+    if (statusEl) {
+      var full = DATA.board.seats;
+      statusEl.textContent = (seated.length === full
+        ? "All " + full + " seats filled"
+        : seated.length + " of " + full + " seats filled")
+        + ", as at " + formatDate(asOf) + ".";
+    }
+
+    return { seated: seated, timeline: events };
+  }
+
   // ---------- theme toggle ----------
   function initTheme(opts) {
     opts = opts || {};
@@ -373,11 +458,13 @@
       parseDate: parseDate, ts: ts, yearOf: yearOf, formatDate: formatDate,
       formatDateShort: formatDateShort, shortDate: shortDate, fmtRate: fmtRate,
       fmtPP: fmtPP, describe: describe, escapeHtml: escapeHtml, rateAt: rateAt,
-      prefersReducedMotion: prefersReducedMotion
+      prefersReducedMotion: prefersReducedMotion,
+      boardAt: boardAt, boardTimeline: boardTimeline
     },
     countUp: countUp,
     buildChart: buildChart,
     renderTable: renderTable,
+    renderBoard: renderBoard,
     initTheme: initTheme,
     setupFilters: setupFilters,
     revealOnLoad: revealOnLoad
