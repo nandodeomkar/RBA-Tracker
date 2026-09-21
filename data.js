@@ -14,9 +14,9 @@
 const RBA_DATA = {
   meta: {
     // Update this whenever you add or change a decision (YYYY-MM-DD).
-    lastUpdated: "2026-06-05",
+    lastUpdated: "2026-09-21",
     // Next scheduled RBA decision announcement (for the "awaiting update" note).
-    nextMeetingDate: "2026-06-16",
+    nextMeetingDate: "2026-09-29",
     // First meeting at which a vote split was published. Markers start here.
     voteRecordStart: "2025-07-08",
     cashRateSource: "https://www.rba.gov.au/statistics/cash-rate/"
@@ -121,6 +121,27 @@ const RBA_DATA = {
       dissent_note: "The one member in the minority preferred to leave the cash rate unchanged at 4.10%.",
       source_url: "https://www.rba.gov.au/media-releases/2026/mr-26-12.html",
       minutes_url: "https://www.rba.gov.au/monetary-policy/rba-board-minutes/2026/2026-05-05.html"
+    },
+    {
+      meeting_date: "2026-06-16",
+      decision_type: "hold",
+      change_bps: 0,
+      cash_rate_pct: 4.35,
+      votes_for: 9,
+      votes_against: 0,
+      source_url: "https://www.rba.gov.au/media-releases/2026/mr-26-15.html",
+      minutes_url: "https://www.rba.gov.au/monetary-policy/rba-board-minutes/2026/2026-06-16.html",
+      notes: "First hold after three consecutive increases in February, March and May 2026."
+    },
+    {
+      meeting_date: "2026-08-11",
+      decision_type: "hold",
+      change_bps: 0,
+      cash_rate_pct: 4.35,
+      votes_for: 9,
+      votes_against: 0,
+      source_url: "https://www.rba.gov.au/media-releases/2026/mr-26-19.html",
+      minutes_url: "https://www.rba.gov.au/monetary-policy/rba-board-minutes/2026/2026-08-11.html"
     }
   ],
 
