@@ -162,6 +162,33 @@ td a{ font-size:.86rem; font-weight:600; color:var(--accent); white-space:nowrap
 td a:hover{ text-decoration:underline; text-underline-offset:3px; }
 .empty-row td{ text-align:center; color:var(--muted); padding:36px; }
 
+/* ---------- board composition ---------- */
+/* Membership only — deliberately kept clear of the vote record above. */
+.board{ padding-bottom:clamp(40px,7vw,80px); }
+.board-grid{ display:grid; gap:clamp(36px,6vw,64px); grid-template-columns:1fr; }
+@media(min-width:860px){ .board-grid{ grid-template-columns:1.1fr 1fr; } }
+.board-grid > div > .eyebrow{ margin:0 0 20px; }
+
+.board-list{ list-style:none; margin:0; padding:0; }
+.bm{ display:grid; grid-template-columns:1fr auto; column-gap:18px; row-gap:2px; padding:13px 0; border-bottom:1px solid var(--grid); }
+.bm-name{ grid-column:1; grid-row:1; font-size:.98rem; font-weight:600; }
+.bm-role{ grid-column:1; grid-row:2; font-size:.86rem; color:var(--ink-2); }
+.bm[data-seat="ex-officio"] .bm-role{ color:var(--accent); }
+.bm-term{ grid-column:2; grid-row:1 / span 2; align-self:center; font-size:.8rem; color:var(--muted); }
+.board-status{ margin:18px 0 0; font-size:.86rem; color:var(--muted); }
+
+.timeline{ list-style:none; margin:0; padding:0; border-left:1px solid var(--hair); }
+.tl{ position:relative; padding:0 0 26px 26px; }
+.tl:last-child{ padding-bottom:0; }
+.tl::before{ content:""; position:absolute; left:-5px; top:6px; width:9px; height:9px; border-radius:50%; background:var(--accent); }
+.tl-date{ display:block; font-size:.72rem; font-weight:600; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); margin-bottom:6px; }
+.tl-text{ font-size:.94rem; color:var(--ink-2); line-height:1.55; }
+.tl-text strong{ color:var(--ink); font-weight:600; }
+.tl-text a{ font-size:.82rem; font-weight:600; color:var(--accent); }
+.tl-text a:hover{ text-decoration:underline; text-underline-offset:3px; }
+
+.board-note{ margin:clamp(32px,5vw,52px) 0 0; padding-top:24px; border-top:1px solid var(--grid); font-size:.88rem; color:var(--muted); max-width:78ch; line-height:1.6; }
+
 /* ---------- footer ---------- */
 .foot{ border-top:1px solid var(--hair); padding-top:clamp(48px,7vw,80px); padding-bottom:clamp(48px,8vw,96px); }
 .foot-grid{ display:grid; gap:36px; grid-template-columns:1fr; }

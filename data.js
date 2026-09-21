@@ -173,7 +173,130 @@ const RBA_DATA = {
     { date: "2026-02-04", cash_rate_pct: 3.85 },
     { date: "2026-03-18", cash_rate_pct: 4.10 },
     { date: "2026-05-06", cash_rate_pct: 4.35 }
-  ]
+  ],
+
+  /*
+   * Monetary Policy Board membership — for the composition timeline only.
+   *
+   * THIS IS NOT VOTE DATA, AND MUST NEVER BECOME IT. The record in
+   * `decisions` above is unattributed: the RBA publishes the count of votes
+   * for and against, never who voted how. Who sits on the Board is a
+   * separate, public fact. Keep the two apart — never add a field linking a
+   * member to a decision, and never render a name beside a vote split.
+   *
+   * The Board was created on 1 March 2025 by the RBA governance reforms,
+   * replacing the former Reserve Bank Board. It seats nine: three ex officio
+   * (Governor, Deputy Governor, Secretary to the Treasury) and six external
+   * members appointed by the Treasurer.
+   *
+   * Fields:
+   *   name        as the RBA styles it, including post-nominals
+   *   role        ex officio title, or "External member"
+   *   seat        "ex-officio" | "external"
+   *   start       "YYYY-MM-DD" — first day on the Board
+   *   end         "YYYY-MM-DD" — last day, actual for past members or
+   *               scheduled for current ones; null where the seat has no
+   *               fixed end (the Treasury Secretary holds it for as long as
+   *               they hold the office)
+   *   note        OPTIONAL — anything the dates alone do not explain
+   *   source_url  OPTIONAL — RBA release announcing the appointment
+   */
+  board: {
+    established: "2025-03-01",
+    seats: 9,
+    membersSource: "https://www.rba.gov.au/about-rba/history/monetary-policy-board-members.html",
+    members: [
+      {
+        name: "Michele Bullock",
+        role: "Governor and Chair",
+        seat: "ex-officio",
+        start: "2025-03-01",
+        end: "2030-09-17",
+        note: "Holds the seat as Governor; the end date is the end of that term."
+      },
+      {
+        name: "Andrew Hauser",
+        role: "Deputy Governor and Deputy Chair",
+        seat: "ex-officio",
+        start: "2025-03-01",
+        end: "2029-09-11",
+        note: "Holds the seat as Deputy Governor; the end date is the end of that term."
+      },
+      {
+        name: "Steven Kennedy PSM",
+        role: "Secretary to the Treasury",
+        seat: "ex-officio",
+        start: "2025-03-01",
+        end: "2025-06-15"
+      },
+      {
+        name: "Jenny Wilkinson PSM",
+        role: "Secretary to the Treasury",
+        seat: "ex-officio",
+        start: "2025-06-16",
+        end: null,
+        note: "Holds the seat ex officio for as long as she is Secretary to the Treasury."
+      },
+      {
+        name: "Marnie Baker AM",
+        role: "External member",
+        seat: "external",
+        start: "2025-03-01",
+        end: "2030-02-28"
+      },
+      {
+        name: "Renée Fry-McKibbin",
+        role: "External member",
+        seat: "external",
+        start: "2025-03-01",
+        end: "2030-02-28"
+      },
+      {
+        name: "Ian Harper AO",
+        role: "External member",
+        seat: "external",
+        start: "2025-03-01",
+        end: "2026-08-31"
+      },
+      {
+        name: "Carolyn Hewson AO",
+        role: "External member",
+        seat: "external",
+        start: "2025-03-01",
+        end: "2027-02-28"
+      },
+      {
+        name: "Iain Ross AO",
+        role: "External member",
+        seat: "external",
+        start: "2025-03-01",
+        end: "2028-08-31"
+      },
+      {
+        name: "Alison Watkins AM",
+        role: "External member",
+        seat: "external",
+        start: "2025-03-01",
+        end: "2026-02-28"
+      },
+      {
+        name: "Bruce Preston",
+        role: "External member",
+        seat: "external",
+        start: "2026-03-01",
+        end: "2031-02-28",
+        source_url: "https://www.rba.gov.au/media-releases/2026/mr-26-04.html"
+      },
+      {
+        name: "Melinda Cilento",
+        role: "External member",
+        seat: "external",
+        start: "2026-09-01",
+        end: "2031-08-31",
+        source_url: "https://www.rba.gov.au/media-releases/2026/mr-26-20.html"
+      }
+    ]
+  }
 };
 
 // Make the data available to app.js whether loaded via <script> (file://) or
